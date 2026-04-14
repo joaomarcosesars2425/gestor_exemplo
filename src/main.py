@@ -36,26 +36,31 @@ def main():
             tipo = input("Tipo de conta (free/premium): ")
             data_nascimento = input("Data nascimento (YYYY-MM-DD): ")
 
-            return_code = criar_utilizador(nome, email, tipo, data_nascimento)
-            if return_code[0] == 201:
-                print("Utilizador criado com sucesso.")
-            elif return_code[0] == 500:
-                print("Internal Error: " + return_code[1])
+            code, obj = criar_utilizador(nome, email, tipo, data_nascimento)
+            if code == 201:
+                print("Utilizador criado com sucesso." + str(obj))
+            else:
+                print("Internal Error: " + str(obj))
 
         elif opcao == "2":
-            return_code = listar_utilizadores()
-            if return_code[0] == 200:
-                print("Utilizador listado com sucesso.")
+            code, obj = listar_utilizadores()
+            if code == 200:
+                print("Lista de utilizadores:")
+                for id_utilizador, dados in obj.items():
+                    print(f"ID: {id_utilizador} | Nome: {dados['nome']} | Email: {dados['email']} | Tipo: {dados['tipo_conta']} | Data Nascimento: {dados['data_nascimento']}")
+
             else:
-                print("Internal Error: " + return_code[1])
+                print(str(code) + ": " + str(obj))
 
         elif opcao == "3":
             id_utilizador = input("ID do utilizador: ")
-            return_code = consultar_utilizador(id_utilizador)
-            if return_code[0] == 200:
-                print("Utilizador listado com sucesso.")
+            code, obj = consultar_utilizador(id_utilizador)
+            if code == 200:
+                print("Utilizador" + id_utilizador + ":")
+                print(obj)
+
             else:
-                print("Internal Error: " + return_code[1])
+                print("Internal Error: " + str(obj))
         elif opcao == "4":
             id_utilizador = input("ID do utilizador: ")
 
@@ -64,25 +69,25 @@ def main():
             tipo = input("Novo tipo (enter para manter): ")
             data = input("Nova data nascimento YYYY-MM-DD (enter para manter): ")
 
-            return_code = atualizar_utilizador(
+            code, obj = atualizar_utilizador(
                 id_utilizador,
                 nome if nome else None,
                 email if email else None,
                 tipo if tipo else None,
                 data if data else None
             )
-            if return_code[0] == 200:
-                print("Utilizador actualizado com sucesso.")
+            if code == 200:
+                print("Utilizador actualizado com sucesso: \n" + str(obj))
             else:
-                print("Internal Error: " + return_code[1])
+                print("Internal Error: " + str(obj))
 
         elif opcao == "5":
             id_utilizador = input("ID do utilizador: ")
-            return_code = remover_utilizador(id_utilizador)
-            if return_code[0] == 200:
-                print("Utilizador removido com sucesso.")
+            code, obj = remover_utilizador(id_utilizador)
+            if code == 200:
+                print("Utilizador removido com sucesso: " + obj)
             else:
-                print("Internal Error: " + return_code[1])
+                print("Internal Error: " + obj)
         elif opcao == "0":
             print("A sair...")
             break
