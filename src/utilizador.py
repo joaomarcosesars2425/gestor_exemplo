@@ -13,46 +13,38 @@ utilizadores = {}
 
 
 # CREATE
-
 def criar_utilizador(nome, email, tipo_conta, data_nascimento):
     if not validar_data(data_nascimento):
         return 500, "Data invalida, Utilize formato YYYY-MM-DD"
 
     id_utilizador = gerar_id_utilizador()
 
-    utilizadores[id_utilizador] = {
+    utilizador = {
         "nome": nome,
         "email": email,
         "tipo_conta": tipo_conta,
         "data_nascimento": data_nascimento
     }
 
-    print(f"Utilizador criado com sucesso. ID: {id_utilizador}")
-    return 201, "Sucesso"
+    utilizadores[id_utilizador] = utilizador
+
+    return 201, utilizador
 
 # READ (listar todos)
-
 def listar_utilizadores():
     if not utilizadores:
-        print("Não existem utilizadores registados.")
         return 404, "Não existem utilizadores registados."
 
-    for id_utilizador, dados in utilizadores.items():
-        print(f"ID: {id_utilizador} | Nome: {dados['nome']} | Email: {dados['email']} | Tipo: {dados['tipo_conta']} | Data Nascimento: {dados['data_nascimento']}")
-    return 200, "Sucesso"
+    return 200, utilizadores
 
 # READ (consultar individual)
-
 def consultar_utilizador(id_utilizador):
     if id_utilizador not in utilizadores:
-        print("Utilizador não encontrado.")
         return 404, "Utilizador não encontrado."
-
-    print(utilizadores[id_utilizador])
-    return 200, "Sucesso"
+    utilizador = utilizadores[id_utilizador]
+    return 200, utilizador
 
 # UPDATE
-
 def atualizar_utilizador(id_utilizador, nome=None, email=None, tipo_conta=None, data_nascimento=None):
     if id_utilizador not in utilizadores:
         print("Utilizador não encontrado.")
@@ -73,16 +65,13 @@ def atualizar_utilizador(id_utilizador, nome=None, email=None, tipo_conta=None, 
     if tipo_conta:
         utilizadores[id_utilizador]["tipo_conta"] = tipo_conta
 
-    print("Utilizador atualizado com sucesso.")
-    return 200, "Sucesso"
+    return 200, utilizadores[id_utilizador]
 
 # DELETE
-
 def remover_utilizador(id_utilizador):
     if id_utilizador not in utilizadores:
         print("Utilizador não encontrado.")
         return 404, "Utilizador não encontrado"
 
     del utilizadores[id_utilizador]
-    print("Utilizador removido com sucesso.")
-    return 200, "Sucesso"
+    return 200, id_utilizador
